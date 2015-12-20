@@ -6,8 +6,6 @@ use App\Question;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 
 class QuestionController extends Controller
 {
@@ -19,9 +17,13 @@ class QuestionController extends Controller
 
     public function getQuestionByText(Request $request)
     {
-        return Question::where('question', md5($request->input('question')))
+        $question = Question::where('question', md5($request->input('question')))
             ->orderBy('agreements', 'desc')
             ->first();
+
+        $question->number = $request->input('number');
+
+        return $question;
     }
 
     public function addQuestion(Request $request)
@@ -47,7 +49,12 @@ class QuestionController extends Controller
                     'answer' => $request->input('answer')
                 ]);
             }
+
+            return response("OK", 200);
         }
+
+        return response("Bad", 400);
+
     }
 
 }

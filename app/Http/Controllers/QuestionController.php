@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class QuestionController extends Controller {
 
     public function getQuestion($id) {
-        return Question::findOrFail($id);
+        return Question::where('question_id', $id)->firstOrFail();
     }
 
     public function addQuestion(Request $request) {

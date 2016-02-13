@@ -2,50 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests;
 use App\Question;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
+class QuestionController extends Controller {
 
-class QuestionController extends Controller
-{
-
-    public function getQuestion($id)
-    {
+    public function getQuestion($id) {
         return Question::findOrFail($id);
     }
 
-    public function getQuestionByText(Request $request)
-    {
-        $question = Question::where('question', md5($request->input('question')))
-            ->orderBy('agreements', 'desc')
-            ->first();
-
-        $question->number = $request->input('number');
-
-        return $question;
-    }
-
-    public function addQuestion(Request $request)
-    {
+    public function addQuestion(Request $request) {
         $validator = \Validator::make($request->all(), [
             'question' => 'required',
             'answer' => 'required',
         ]);
 
-        if($validator->passes())
-        {
-            $question = Question::where('question', md5($request->input('question')))->where('answer', $request->input('answer'))->first();
+        if ($validator->passes()) {
+            $question = Question::where('question_id', $request->input('question'))->where('answer', $request->input('answer'))->first();
 
-            if($question)
-            {
-                $question->agreements++;
-
-                $question->save();
-            } else
-            {
+            if ($question) {
+                $question->increment('agreements');
+            } else {
                 Question::create([
-                    'question' => md5($request->input('question')),
+                    'question_id' => $request->input('question'),
                     'answer' => $request->input('answer')
                 ]);
             }

@@ -16,5 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('/question/{id}', "QuestionController@getQuestion");
-Route::post('/question/bytext', "QuestionController@getQuestionByText");
 Route::post('/question/add', "QuestionController@addQuestion");

@@ -14,7 +14,7 @@ class UpdateQuestionModelToFitNewCastle extends Migration
     {
         Schema::table('questions', function (Blueprint $table) {
             $table->dropColumn('question');
-            $table->double('question_id')->unique();
+            $table->double('question_id');
         });
     }
 
